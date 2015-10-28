@@ -3,7 +3,7 @@ use warnings;
 
 use ExtUtils::MakeMaker;
 
-my $readme = 'podselect $(VERSION_FROM) > README.pod';
+my $readme = 'podselect lib/WebService/Aria2.pod > README.pod';
 
 WriteMakefile 
 (
