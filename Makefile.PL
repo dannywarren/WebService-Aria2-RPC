@@ -16,7 +16,8 @@ WriteMakefile
 
   PREREQ_PM =>
   {
-    'JSON::RPC'  => "1.06",
+    'JSON::RPC' => "1.06",
+    'Moose'     => "2.1603",
   },
 
   TEST_REQUIRES => 

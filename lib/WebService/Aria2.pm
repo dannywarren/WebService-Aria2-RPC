@@ -1,32 +1,73 @@
 package WebService::Aria2;
 
-our $VERSION = '0.01';
-
-use strict;
-use warnings;
+use Moose;
 
 use JSON::RPC::Legacy::Client;
+
+
+#############################################################################
+# Meta
+#############################################################################
+
+our $VERSION = '0.01';
+
+
+#############################################################################
+# Public Accessors
+#############################################################################
+
+has uri => 
+( 
+  is      => 'rw', 
+  isa     => 'Str', 
+  default => 'http://localhost:6800/jsonrpc',
+);
+
+has secret => 
+( 
+  is  => 'rw', 
+  isa => 'Str',
+);
+
+has max_results =>
+(
+  is      => 'rw',
+  isa     => 'Int',
+  default => 99,
+);
+
+
+#############################################################################
+# Private Accessors
+#############################################################################
+
+has counter => 
+(
+  is       => 'rw', 
+  isa      => 'Int',
+  default  => 0,
+);
+
+has rpc => 
+(
+  is         => 'rw', 
+  isa        => 'JSON::RPC::Legacy::Client',
+  lazy_build => 1,
+);
 
 
 #############################################################################
 # Object Methods
 #############################################################################
 
-# Constructor
-sub new
+# Initialize the rpc client instance
+sub _build_rpc 
 {
-  my ( $class, %args ) = @_;
+  my ( $self ) = @_;
 
-  my $self =
-  {
-    url         => 'http://localhost:6800/jsonrpc',
-    secret      => undef,
-    rpc         => undef,
-    request_id  => 0,
-    max_num     => 99,
-  };
+  my $rpc = JSON::RPC::Legacy::Client->new();
 
-  return bless $self, $class;
+  return $rpc;
 }
 
 
@@ -34,48 +75,36 @@ sub new
 # Public Methods
 #############################################################################
 
-# Initialization
-sub init
-{
-  my ( $self ) = @_;
-
-  # Create an instance of our json/rpc client
-  $self->{rpc} = JSON::RPC::Legacy::Client->new();
-
-  return;
-}
-
-
 # Base method for talking to aria2 via json-rpc
 sub call
 {
   my ( $self, $method, @params ) = @_;
 
   # Initialize the rpc if not already done
-  if ( ! defined $self->{rpc} )
+  if ( ! defined $self->rpc )
   {
     $self->init;
   }
 
   # Pass along the secret token
-  if ( defined $self->{secret} )
+  if ( defined $self->secret )
   {
     # If a secret value is configured, generate a secret token to include at the front of
     # every rpc request
     # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#rpc-auth
-    my $secret_token = sprintf "token:%s", $self->{secret};
+    my $secret_token = sprintf "token:%s", $self->secret;
 
     # Add the secret token to the front of the parameters list
     unshift @params, $secret_token;
   }
 
-  # Bump the request id every time we make a call
-  $self->{rpc}->id( $self->{request_id}++ );
+  # Increment the request counter
+  $self->_increment_counter;
 
   # Make the json-rpc call
-  my $response = $self->{rpc}->call
+  my $response = $self->rpc->call
   (
-    $self->{url},
+    $self->uri,
     {
       method => $method,
       params => \@params,
@@ -85,7 +114,7 @@ sub call
   # Handle low level protocol errors
   if ( ! defined $response )
   {
-    warn "ERROR: %s\n", $self->{rpc}->status_line;
+    warn "ERROR: %s\n", $self->rpc->status_line;
     return;
   }
 
@@ -146,7 +175,7 @@ sub get_waiting
 {
   my ( $self ) = @_;
 
-  return $self->call( "aria2.tellWaiting", 0, $self->{max_num} );
+  return $self->call( "aria2.tellWaiting", 0, $self->max_results );
 }
 
 
@@ -156,7 +185,7 @@ sub get_stopped
 {
   my ( $self ) = @_;
 
-  return $self->call( "aria2.tellStopped", 0, $self->{max_num} );
+  return $self->call( "aria2.tellStopped", 0, $self->max_results );
 }
 
 
@@ -199,6 +228,25 @@ sub purge
 
   # Otherwise, purge all completed downloads
   return $self->call( "aria2.purgeDownloadResult" );
+}
+
+
+#############################################################################
+# Private Methods
+#############################################################################
+
+# Increment the request counter
+sub _increment_counter
+{
+  my ( $self ) = @_;
+
+  # Bump the counter
+  $self->counter( $self->counter + 1 );
+
+  # Use the counter as the next rpc request id
+  $self->rpc->id( $self->counter );
+
+  return;
 }
 
 
