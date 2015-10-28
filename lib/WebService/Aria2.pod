@@ -2,10 +2,6 @@
 
 WebService::Aria2 - Control an aria2 instance use a web service interface
 
-=head1 VERSION
-
-0.01
-
 =head1 SYNOPSIS
 
   use WebService::Aria2;
