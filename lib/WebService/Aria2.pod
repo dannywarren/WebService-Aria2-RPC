@@ -1,0 +1,38 @@
+=head1 NAME
+
+WebService::Aria2 - Control an aria2 instance use a web service interface
+
+=head1 VERSION
+
+0.01
+
+=head1 SYNOPSIS
+
+  use WebService::Aria2;
+
+  my $aria2 = Aria2::Client->new();
+
+  my $gid = $aria2->add_uri( 'http://example.com/file.tgz' );
+  $aria2->pause( $gid );
+
+=head1 DESCRIPTION
+
+Control an aria2 instance via a web service interface like JSON-RPC.
+
+See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#rpc-interface
+
+=head1 METHODS
+
+TODO
+
+=head1 AUTHOR
+
+Danny Warren
+
+=head1 COPYRIGHT
+
+Copyright (c) 2015, L</"AUTHOR">.
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify it under the same terms as Perl itself.
