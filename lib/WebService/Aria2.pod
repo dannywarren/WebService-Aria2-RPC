@@ -23,7 +23,7 @@ TODO
 
 =head1 AUTHOR
 
-Danny Warren
+Danny Warren <danny@dannywarren.com>
 
 =head1 COPYRIGHT
 
@@ -32,3 +32,5 @@ Copyright (c) 2015, L</"AUTHOR">.
 =head1 LICENSE
 
 This library is free software, you can redistribute it and/or modify it under the same terms as Perl itself.
+
+=cut
