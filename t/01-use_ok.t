@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More;
 
-use_ok( 'WebService::Aria2' );
+use_ok( 'WebService::Aria2::RPC' );
 
 done_testing();
 

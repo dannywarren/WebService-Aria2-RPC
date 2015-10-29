@@ -1,19 +1,19 @@
 =head1 NAME
 
-WebService::Aria2 - Control an aria2 instance use a web service interface
+WebService::Aria2::RPC - Control an aria2 instance via the RPC interface
 
 =head1 SYNOPSIS
 
-  use WebService::Aria2;
+  use WebService::Aria2::RPC::JSON;
 
-  my $aria2 = Aria2::Client->new();
+  my $aria2 = WebService::Aria2::RPC::JSON->new();
 
   my $gid = $aria2->add_uri( 'http://example.com/file.tgz' );
   $aria2->pause( $gid );
 
 =head1 DESCRIPTION
 
-Control an aria2 instance via a web service interface like JSON-RPC.
+Control an aria2 instance via the RPC interface.
 
 See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#rpc-interface
 
@@ -23,7 +23,7 @@ TODO
 
 =head1 AUTHOR
 
-Danny Warren
+Danny Warren <danny@dannywarren.com>
 
 =head1 COPYRIGHT
 
@@ -32,3 +32,4 @@ Copyright (c) 2015, L</"AUTHOR">.
 =head1 LICENSE
 
 This library is free software, you can redistribute it and/or modify it under the same terms as Perl itself.
+

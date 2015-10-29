@@ -3,16 +3,16 @@ use warnings;
 
 use ExtUtils::MakeMaker;
 
-my $readme = 'podselect lib/WebService/Aria2.pod > README.pod';
+my $readme = 'podselect lib/WebService/Aria2/RPC.pod > README.pod';
 
 WriteMakefile 
 (
 
-  NAME          => "WebService::Aria2",
+  NAME          => "WebService::Aria2::RPC",
   AUTHOR        => "Danny Warren <danny\@dannywarren.com>",
   LICENSE       => "perl",
-  VERSION_FROM  => "lib/WebService/Aria2.pm",
-  ABSTRACT_FROM => "lib/WebService/Aria2.pod",
+  VERSION_FROM  => "lib/WebService/Aria2/RPC.pm",
+  ABSTRACT_FROM => "lib/WebService/Aria2/RPC.pod",
 
   PREREQ_PM =>
   {
@@ -29,8 +29,8 @@ WriteMakefile
   {
     resources => 
     {
-      homepage   => "https://github.com/dannywarren/WebService-Aria2",
-      repository => "https://github.com/dannywarren/WebService-Aria2",
+      homepage   => "https://github.com/dannywarren/WebService-Aria2-RPC",
+      repository => "https://github.com/dannywarren/WebService-Aria2-RPC",
     },
   },
 
