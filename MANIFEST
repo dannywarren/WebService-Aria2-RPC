@@ -1,6 +1,4 @@
 Changes
-lib/WebService/Aria2.pm
-lib/WebService/Aria2.pod
 lib/WebService/Aria2/RPC.pm
 lib/WebService/Aria2/RPC.pod
 lib/WebService/Aria2/RPC/JSON.pm
@@ -8,4 +6,3 @@ Makefile.PL
 MANIFEST			This list of files
 README.pod
 t/01-use_ok.t
-WebService-Aria2-RPC-0.01.tar.gz
