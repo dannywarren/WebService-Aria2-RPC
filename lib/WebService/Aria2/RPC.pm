@@ -14,6 +14,12 @@ our $VERSION = '0.01';
 # Public Accessors
 #############################################################################
 
+has secret => 
+( 
+  is      => 'rw', 
+  isa     => 'Str',
+);
+
 has max_results =>
 (
   is      => 'rw',
@@ -25,7 +31,6 @@ has max_results =>
 #############################################################################
 # Private Accessors
 #############################################################################
-
 
 
 #############################################################################
@@ -142,6 +147,19 @@ sub purge
 #############################################################################
 # Private Methods
 #############################################################################
+
+# Format the secret token
+sub _secret_token
+{
+  my ( $self ) = @_;
+
+  return if ! defined $self->secret;
+
+  # If a secret value is configured, generate a secret token to include at the front of
+  # every rpc request
+  # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#rpc-auth
+  return sprintf "token:%s", $self->secret;
+}
 
 
 1;
