@@ -14,18 +14,6 @@ our $VERSION = '0.01';
 # Public Accessors
 #############################################################################
 
-has uri => 
-( 
-  is      => 'rw', 
-  isa     => 'Str', 
-);
-
-has secret => 
-( 
-  is  => 'rw', 
-  isa => 'Str',
-);
-
 has max_results =>
 (
   is      => 'rw',
@@ -38,10 +26,6 @@ has max_results =>
 # Private Accessors
 #############################################################################
 
-has rpc => 
-(
-  is => 'rw', 
-);
 
 
 #############################################################################
@@ -107,25 +91,33 @@ sub get_stopped
 
 # Pause a download
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.pause
+# See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.pauseAll
 sub pause
 {
   my ( $self, $gid ) = @_;
 
-  return if ! defined $gid;
+  if ( defined $gid )
+  {
+    return $self->call( "aria2.pause", $gid );
+  }
 
-  return $self->call( "aria2.pause", $gid );
+  return $self->call( "aria2.pauseAll" );
 }
 
 
 # Unpause a download
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.unpause
+# See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.unpauseAll
 sub unpause
 {
   my ( $self, $gid ) = @_;
 
-  return if ! defined $gid;
+  if ( defined $gid )
+  {
+    return $self->call( "aria2.unpause", $gid );
+  }
 
-  return $self->call( "aria2.unpause", $gid );
+  return $self->call( "aria2.unpauseAll" );
 }
 
 
