@@ -56,11 +56,11 @@ sub get_version
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.addUri
 sub add_uri
 {
-  my ( $self, $uri ) = @_;
+  my ( $self, $args ) = @_;
 
-  return if ! defined $uri;
+  return if ! defined $args->{uri};
 
-  return $self->call( "aria2.addUri", [ $uri ] );
+  return $self->call( "aria2.addUri", [ $args->{uri} ] );
 }
 
 
@@ -78,9 +78,14 @@ sub get_active
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.tellWaiting
 sub get_waiting
 {
-  my ( $self ) = @_;
+  my ( $self, $args ) = @_;
 
-  return $self->call( "aria2.tellWaiting", 0, $self->max_results );
+  return $self->call
+  ( 
+    "aria2.tellWaiting", 
+    $args->{offset} || 0, 
+    $args->{max_results} || $self->max_results,
+  );
 }
 
 
@@ -88,9 +93,14 @@ sub get_waiting
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.tellStopped
 sub get_stopped
 {
-  my ( $self ) = @_;
+  my ( $self, $args ) = @_;
 
-  return $self->call( "aria2.tellStopped", 0, $self->max_results );
+  return $self->call
+  ( 
+    "aria2.tellStopped", 
+    $args->{offset} || 0, 
+    $args->{max_results} || $self->max_results, 
+  );
 }
 
 
@@ -99,11 +109,11 @@ sub get_stopped
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.pauseAll
 sub pause
 {
-  my ( $self, $gid ) = @_;
+  my ( $self, $args ) = @_;
 
-  if ( defined $gid )
+  if ( defined $args->{gid} )
   {
-    return $self->call( "aria2.pause", $gid );
+    return $self->call( "aria2.pause", $args->{gid} );
   }
 
   return $self->call( "aria2.pauseAll" );
@@ -115,11 +125,11 @@ sub pause
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.unpauseAll
 sub unpause
 {
-  my ( $self, $gid ) = @_;
+  my ( $self, $args ) = @_;
 
-  if ( defined $gid )
+  if ( defined $args->{gid} )
   {
-    return $self->call( "aria2.unpause", $gid );
+    return $self->call( "aria2.unpause", $args->{gid} );
   }
 
   return $self->call( "aria2.unpauseAll" );
@@ -131,12 +141,12 @@ sub unpause
 # See: http://aria2.sourceforge.net/manual/en/html/aria2c.html#aria2.removeDownloadResult
 sub purge
 {
-  my ( $self, $gid ) = @_;
+  my ( $self, $args ) = @_;
 
   # If a gid was given, purge only that gid
-  if ( defined $gid )
+  if ( defined $args->{gid} )
   {
-    return $self->call( "aria2.removeDownloadResult", $gid );
+    return $self->call( "aria2.removeDownloadResult", $args->{gid} );
   }
 
   # Otherwise, purge all completed downloads
